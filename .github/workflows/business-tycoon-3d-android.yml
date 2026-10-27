@@ -31,13 +31,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install export dependencies
         run: |
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
           mkdir -p ~/.config/godot
           cat > ~/.config/godot/editor_settings-4.tres <<'EOF'
           [gd_resource type="EditorSettings" format=3]
