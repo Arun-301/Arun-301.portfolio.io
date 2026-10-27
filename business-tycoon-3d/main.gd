@@ -65,7 +65,7 @@ func _build_world():
 		_box(scene_root, Vector3(-4.8,0.8,z), Vector3(2.0,1.6,0.72), Color("#805638"), "Shelf")
 		_box(scene_root, Vector3(-4.8,1.58,z), Vector3(2.1,0.08,0.8), Color("#d7c9ac"), "Shelf top")
 		for p in range(5):
-			var col := [Color("#e75b48"),Color("#f0b83d"),Color("#55a6bd"),Color("#73ad67"),Color("#bd79b5")][p]
+			var col: Color = [Color("#e75b48"),Color("#f0b83d"),Color("#55a6bd"),Color("#73ad67"),Color("#bd79b5")][p]
 			_box(scene_root, Vector3(-5.55 + p*0.37,1.08,z), Vector3(0.25,0.42,0.32), col, "Product")
 			_box(scene_root, Vector3(-5.55 + p*0.37,1.45,z), Vector3(0.25,0.2,0.32), col.lightened(0.12), "Product")
 	# Produce bins
@@ -73,7 +73,7 @@ func _build_world():
 		_box(scene_root, Vector3(x,0.48,-2.8), Vector3(1.65,0.9,1.25), Color("#98704a"), "Produce counter")
 		for i in range(4):
 			for j in range(3):
-				var fruit_color := [Color("#d94b3d"),Color("#e9b83d"),Color("#65a85b")][(i+j)%3]
+				var fruit_color: Color = [Color("#d94b3d"),Color("#e9b83d"),Color("#65a85b")][(i+j)%3]
 				var fruit := _box(scene_root, Vector3(x-0.55+i*0.36,1.0,-3.2+j*0.34), Vector3(0.25,0.22,0.25), fruit_color, "Fruit")
 	# Checkout
 	_box(scene_root, Vector3(5.4,0.55,3.3), Vector3(2.2,1.1,1.1), Color("#6d8f8a"), "Checkout")
@@ -271,10 +271,10 @@ func _unhandled_input(event):
 		elif event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			_zoom(1.2)
 	elif event is InputEventMouseMotion and dragging:
-		var delta := event.position - last_mouse
+		var drag_delta: Vector2 = event.position - last_mouse
 		last_mouse = event.position
-		camera_target.x = clamp(camera_target.x - delta.x*0.025, -5.0, 5.0)
-		camera_target.z = clamp(camera_target.z - delta.y*0.025, -4.0, 4.0)
+		camera_target.x = clamp(camera_target.x - drag_delta.x*0.025, -5.0, 5.0)
+		camera_target.z = clamp(camera_target.z - drag_delta.y*0.025, -4.0, 4.0)
 		_update_camera()
 	elif event is InputEventScreenDrag:
 		camera_target.x = clamp(camera_target.x - event.relative.x*0.025, -5.0, 5.0)
