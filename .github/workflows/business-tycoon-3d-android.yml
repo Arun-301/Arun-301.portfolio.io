@@ -90,7 +90,7 @@ jobs:
       - name: Export APK
         run: |
           godot --headless --path business-tycoon-3d --editor --quit
-          godot --headless --path business-tycoon-3d --export-debug "Android" build/Business-Tycoon-3D.apk
+          godot --headless --path business-tycoon-3d --install-android-build-template --export-debug "Android" build/Business-Tycoon-3D.apk
           test -s build/Business-Tycoon-3D.apk
           file build/Business-Tycoon-3D.apk
           ls -lh build/Business-Tycoon-3D.apk
