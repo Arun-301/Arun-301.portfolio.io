@@ -25,6 +25,12 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
 
