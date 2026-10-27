@@ -1,0 +1,95 @@
+name: Build Business Tycoon 3D Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'business-tycoon-3d/**'
+      - '.github/workflows/business-tycoon-3d-android.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.4.1
+          use-dotnet: false
+          include-templates: true
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install export dependencies
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          mkdir -p ~/.config/godot
+          cat > ~/.config/godot/editor_settings-4.tres <<'EOF'
+          [gd_resource type="EditorSettings" format=3]
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/debug_keystore = ""
+          EOF
+          mkdir -p build
+
+      - name: Configure Android export preset
+        run: |
+          cat > business-tycoon-3d/export_presets.cfg <<'EOF'
+          [preset.0]
+          name="Android"
+          platform="Android"
+          runnable=true
+          dedicated_server=false
+          custom_features=""
+          export_filter="all_resources"
+          include_filter=""
+          exclude_filter=""
+          export_path="build/Business-Tycoon-3D.apk"
+          encryption_include_filters=""
+          encryption_exclude_filters=""
+          encrypt_pck=false
+          encrypt_directory=false
+          [preset.0.options]
+          custom_template/debug=""
+          custom_template/release=""
+          gradle_build/use_gradle_build=true
+          gradle_build/export_format=0
+          gradle_build/min_sdk=24
+          gradle_build/target_sdk=35
+          gradle_build/compress_native_libraries=true
+          gradle_build/export_orange=true
+          package/unique_name="com.arun.business_tycoon3d"
+          package/name="Business Tycoon 3D"
+          package/signed=true
+          package/app_category=2
+          package/retain_data_on_uninstall=false
+          package/exclude_from_recents=false
+          screen/immersive_mode=true
+          screen/orientation=0
+          permissions/internet=false
+          EOF
+
+      - name: Export APK
+        run: |
+          godot --headless --path business-tycoon-3d --editor --quit
+          godot --headless --path business-tycoon-3d --export-debug "Android" build/Business-Tycoon-3D.apk
+          test -s build/Business-Tycoon-3D.apk
+          file build/Business-Tycoon-3D.apk
+          ls -lh build/Business-Tycoon-3D.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: business-tycoon-3d-android-apk
+          path: build/Business-Tycoon-3D.apk
+          if-no-files-found: error
+          retention-days: 30
