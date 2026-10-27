@@ -70,12 +70,6 @@ jobs:
           [preset.0.options]
           custom_template/debug=""
           custom_template/release=""
-          gradle_build/use_gradle_build=true
-          gradle_build/export_format=0
-          gradle_build/min_sdk=24
-          gradle_build/target_sdk=34
-          gradle_build/compress_native_libraries=true
-          gradle_build/export_orange=true
           package/unique_name="com.arun.business_tycoon3d"
           package/name="Business Tycoon 3D"
           package/signed=true
@@ -90,7 +84,7 @@ jobs:
       - name: Export APK
         run: |
           godot --headless --path business-tycoon-3d --editor --quit
-          godot --headless --path business-tycoon-3d --install-android-build-template --export-debug "Android" build/Business-Tycoon-3D.apk
+          godot --headless --path business-tycoon-3d --export-debug "Android" build/Business-Tycoon-3D.apk
           test -s build/Business-Tycoon-3D.apk
           file build/Business-Tycoon-3D.apk
           ls -lh build/Business-Tycoon-3D.apk
