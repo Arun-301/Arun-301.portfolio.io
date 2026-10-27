@@ -39,12 +39,13 @@ jobs:
       - name: Install export dependencies
         run: |
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          sdkmanager --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;28.1.13356709"
           mkdir -p ~/.config/godot
-          cat > ~/.config/godot/editor_settings-4.tres <<'EOF'
+          cat > ~/.config/godot/editor_settings-4.tres <<EOF
           [gd_resource type="EditorSettings" format=3]
           [resource]
           export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/java_sdk_path = "$JAVA_HOME"
           export/android/debug_keystore = ""
           EOF
           mkdir -p build
@@ -69,7 +70,7 @@ jobs:
           [preset.0.options]
           custom_template/debug=""
           custom_template/release=""
-          gradle_build/use_gradle_build=true
+          gradle_build/use_gradle_build=false
           gradle_build/export_format=0
           gradle_build/min_sdk=24
           gradle_build/target_sdk=35
