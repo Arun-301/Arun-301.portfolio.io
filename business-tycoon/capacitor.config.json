@@ -1,0 +1,6 @@
+{
+  "appId": "com.arun301.businesstycoon",
+  "appName": "Business Tycoon",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}
