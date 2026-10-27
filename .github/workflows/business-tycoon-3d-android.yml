@@ -39,7 +39,7 @@ jobs:
       - name: Install export dependencies
         run: |
           yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.1" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;28.1.13356709"
+          sdkmanager --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-34" "build-tools;34.0.0" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;28.1.13356709"
           mkdir -p ~/.config/godot ~/.android build
           keytool -genkeypair -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US" -noprompt
           cat > ~/.config/godot/editor_settings-4.tres <<EOF
@@ -104,6 +104,9 @@ jobs:
           echo "Android SDK paths:"
           echo "ANDROID_HOME=$ANDROID_HOME"
           echo "JAVA_HOME=$JAVA_HOME"
+          test -x "$ANDROID_HOME/build-tools/34.0.0/apksigner" || { echo "::error::Missing apksigner for Android SDK build-tools 34.0.0"; exit 1; }
+          test -x "$ANDROID_HOME/platform-tools/adb" || { echo "::error::Missing adb in Android SDK platform-tools"; exit 1; }
+          test -x "$JAVA_HOME/bin/java" || { echo "::error::Missing java under JAVA_HOME"; exit 1; }
           test -d "$HOME/.local/share/godot/export_templates/4.4.1.stable" || {
             echo "::error::Godot 4.4.1 export template directory is missing."
             exit 1
